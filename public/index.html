@@ -55,7 +55,6 @@
         margin: 0;
         padding: 0;
         background: #0f0f23;
-        overflow: hidden;
       }
       
       .loading-container {
@@ -77,7 +76,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        overflow: hidden;
+        pointer-events: none;
       }
       
       .particle {
@@ -350,7 +349,7 @@
     <div id="root"></div>
     
     <script>
-      // Enhanced loading screen management
+      // Enhanced loading screen management with mobile optimization
       let loadingMessages = [
         "Initializing your networking automation...",
         "Connecting to LinkedIn ecosystem...",
@@ -359,6 +358,26 @@
       ];
       
       let currentMessageIndex = 0;
+      
+      // Prevent background scrolling on mobile during loading
+      function preventBackgroundScroll() {
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen && loadingScreen.style.display !== 'none') {
+          document.body.style.overflow = 'hidden';
+          document.body.style.position = 'fixed';
+          document.body.style.width = '100%';
+        }
+      }
+      
+      // Restore scrolling capability
+      function restoreScrolling() {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+      }
+      
+      // Initialize scroll prevention
+      preventBackgroundScroll();
       
       // Rotate loading messages
       function rotateLoadingMessage() {
@@ -385,6 +404,7 @@
             loadingScreen.style.opacity = '0';
             setTimeout(function() {
               loadingScreen.style.display = 'none';
+              restoreScrolling(); // Restore scrolling when loading is complete
             }, 800);
           }
         }, 1200);
@@ -398,6 +418,7 @@
           loadingScreen.style.opacity = '0';
           setTimeout(function() {
             loadingScreen.style.display = 'none';
+            restoreScrolling(); // Restore scrolling on fallback
           }, 800);
         }
       }, 6000);
